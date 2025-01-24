@@ -1,0 +1,76 @@
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+env/
+venv/
+ENV/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Logs and local environment settings
+*.log
+*.env
+*.ini
+*.toml
+*.sqlite3
+
+# Test coverage
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# macOS and Windows metadata files
+.DS_Store
+Thumbs.db
+
+# IDE configurations
+.vscode/
+.idea/
+
+# Python-specific editor settings
+*.swp
+*.swo
+
+# Documentation builds
+/site
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Local testing
+test/
+tests/__pycache__/
+
+# PyCharm helpers
+*.pyi
+
+# PyCharm helpers
+*.pyo
