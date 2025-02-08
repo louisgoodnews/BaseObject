@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 
 from typing import *
 
-from utils.logger.logger import Logger
+from utils.logger import Logger
 
 
 __all__: List[str] = ["BaseObjectManager"]
@@ -121,9 +121,6 @@ class BaseObjectManager:
             # Log a warning message
             self.logger.warning(message=f"Key '{key}' already exists. Overwriting...")
 
-        # Generate a unique key
-        key = f"{key}_{len(self._cache)}"
-
         # Add the key-value pair to the cache
         self._cache.append(
             {
@@ -189,6 +186,28 @@ class BaseObjectManager:
 
             # Log updating the timestamp
             self.logger.info(message="Updated the timestamp to now.")
+
+    def get_cache_keys(self) -> List[str]:
+        """
+        Returns the keys of the cache.
+
+        :return: The keys of the cache.
+        :rtype: List[str]
+        """
+
+        # Return the keys of the cache
+        return [item["key"] for item in self._cache]
+
+    def get_cache_values(self) -> List[Any]:
+        """
+        Returns the values of the cache.
+
+        :return: The values of the cache.
+        :rtype: List[Any]
+        """
+
+        # Return the values of the cache
+        return [item["value"] for item in self._cache]
 
     def get_key_from_cache(
         self,
@@ -293,3 +312,39 @@ class BaseObjectManager:
 
         # Return True if the value exists, False otherwise
         return value in [item["value"] for item in self._cache]
+
+    def update_in_cache(
+        self,
+        key: str,
+        value: Any,
+    ) -> None:
+        """
+        Updates the value of the item with the given key in the cache.
+
+        :param key: The key of the item.
+        :type key: str
+
+        :param value: The new value of the item.
+        :type value: Any
+
+        :return: None
+        :rtype: None
+
+        :raises KeyError: If the key does not exist.
+        """
+
+        # Update the value of the item with the given key in the cache
+        for item in self._cache:
+            # Check if the key matches
+            if item["key"] == key:
+                # Update the value of the item
+                item["value"] = value
+
+                # Log an info message about the update
+                self.logger.info(message=f"Updated in cache: {key}")
+
+                # Return early since the key was found
+                break
+            else:
+                # Raise a KeyError if the key was not found
+                raise KeyError("Key not found")

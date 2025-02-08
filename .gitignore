@@ -74,3 +74,8 @@ tests/__pycache__/
 
 # PyCharm helpers
 *.pyo
+
+# Miscellaneous
+*.log
+*.sqlite3
+*.db
