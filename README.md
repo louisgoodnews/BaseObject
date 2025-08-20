@@ -14,7 +14,7 @@ A Python package providing flexible base classes for creating objects with type 
 ## Installation
 
 ```bash
-pip install baseobject
+git clone https://github.com/louisgoodnews/BaseObject.git
 ```
 
 ## Usage
