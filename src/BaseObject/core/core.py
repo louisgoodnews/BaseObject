@@ -203,9 +203,7 @@ class MutableBaseObject:
         """
 
         attributes: Dict[str, Any] = {
-            key.lstrip("_"): value
-            for key, value in vars(self).items()
-            if not key.startswith("_")
+            key.lstrip("_"): value for key, value in vars(self).items() if not key.startswith("_")
         }
 
         # Return a copy of the object
@@ -469,9 +467,7 @@ class MutableBaseObject:
         """
 
         attributes: Dict[str, Any] = {
-            key.lstrip("_"): value
-            for key, value in vars(self).items()
-            if not key.startswith("_")
+            key.lstrip("_"): value for key, value in vars(self).items() if not key.startswith("_")
         }
 
         # Return a copy of the object
@@ -643,9 +639,7 @@ class MutableBaseObject:
         """
 
         attributes: Dict[str, Any] = {
-            key.lstrip("_"): value
-            for key, value in kwargs.items()
-            if not key.startswith("_")
+            key.lstrip("_"): value for key, value in kwargs.items() if not key.startswith("_")
         }
 
         # Return a new object created from the dictionary
@@ -1071,9 +1065,7 @@ class ImmutableBaseObject(MutableBaseObject):
         """
 
         attributes: Dict[str, Any] = {
-            key.lstrip("_"): value
-            for key, value in vars(self).items()
-            if not key.startswith("_")
+            key.lstrip("_"): value for key, value in vars(self).items() if not key.startswith("_")
         }
 
         if as_mutable:
@@ -1229,9 +1221,7 @@ class ImmutableBaseObject(MutableBaseObject):
         """
 
         attributes: Dict[str, Any] = {
-            key.lstrip("_"): value
-            for key, value in vars(self).items()
-            if not key.startswith("_")
+            key.lstrip("_"): value for key, value in vars(self).items() if not key.startswith("_")
         }
 
         if as_mutable:
