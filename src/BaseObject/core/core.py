@@ -351,7 +351,7 @@ class MutableBaseObject:
         """
 
         # Return a string representation of the object
-        return f"<{self.__class__.__name__} ({', '.join(f'{key.removeprefix("_")}={value!r}' for (key, value,) in vars(self).items())})>"
+        return f"<{self.__class__.__name__} ({', '.join(f'{key}={value!r}' for (key, value,) in self.to_dict().items())})>"
 
     def __setitem__(
         self,
@@ -811,6 +811,7 @@ class MutableBaseObject:
 
     def to_dict(
         self,
+        allow_leading_underscores: bool = False,
         exclude: Optional[List[str]] = None,
         sort: Optional[Literal["ascending", "descending"]] = None,
     ) -> Dict[str, Any]:
@@ -827,26 +828,33 @@ class MutableBaseObject:
         """
 
         # Get the dictionary of attributes
-        dictionary: Dict[str, Any] = dict(vars(self))
+        dictionary: Dict[str, Any] = {
+            key: value
+            for (
+                key,
+                value,
+            ) in sorted(
+                dict(vars(self)).items(),
+                reverse=sort == "ascending",
+            )
+        }
+
+        # Check if keys with leading underscores are allowed
+        if not allow_leading_underscores:
+            # Update the dictionary to remove all keys with a underscore prefix
+            dictionary = {
+                key: value
+                for (
+                    key,
+                    value,
+                ) in dictionary.items()
+                if not key.startswith("_")
+            }
 
         # Check if an exclude list is provided
         if not exclude:
             # Return the full dictionary
-            return (
-                {key: dictionary.get(key) for key in sorted(dictionary.keys())}
-                if sort == "ascending"
-                else (
-                    {
-                        key: dictionary.get(key)
-                        for key in sorted(
-                            dictionary.keys(),
-                            reverse=True,
-                        )
-                    }
-                    if sort == "descending"
-                    else dictionary
-                )
-            )
+            return dictionary
 
         # Iterate over the exclude list
         for key in exclude:
@@ -857,21 +865,7 @@ class MutableBaseObject:
             )
 
         # Return the dictionary
-        return (
-            {key: dictionary.get(key) for key in sorted(dictionary.keys())}
-            if sort == "ascending"
-            else (
-                {
-                    key: dictionary.get(key)
-                    for key in sorted(
-                        dictionary.keys(),
-                        reverse=True,
-                    )
-                }
-                if sort == "descending"
-                else dictionary
-            )
-        )
+        return dictionary
 
     def to_filtered_dict(
         self,

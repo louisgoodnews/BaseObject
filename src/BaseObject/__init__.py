@@ -5,7 +5,7 @@ Date: 2025-08-20
 
 from typing import Final, List, Literal
 
-from core.core import (
+from .core.core import (
     ImmutableBaseObject,
     MutableBaseObject,
 )
