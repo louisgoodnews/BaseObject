@@ -6,22 +6,20 @@ Date: 2025-08-20
 import copy
 import json
 
+from collections.abc import ItemsView, KeysView, ValuesView
 from typing import (
     Any,
-    Dict,
     Final,
     Iterator,
-    List,
     Literal,
     Optional,
     override,
-    Tuple,
     Type,
     Union,
 )
 
 
-__all__: Final[List[str]] = [
+__all__: Final[list[str]] = [
     "ImmutableBaseObject",
     "MutableBaseObject",
 ]
@@ -43,14 +41,14 @@ class MutableBaseObject:
         and sets the attributes on the object.
 
         :param kwargs: A dictionary of key-value pairs to set as attributes on the object.
-        :type kwargs: Dict[str, Any]
+        :type kwargs: dict[str, Any]
 
         :return: None
         :rtype: None
         """
 
         # Get the annotations of the object
-        annotations: Dict[str, Any] = getattr(
+        annotations: dict[str, Any] = getattr(
             self,
             "__annotations__",
             {},
@@ -202,10 +200,8 @@ class MutableBaseObject:
         :rtype: MutableBaseObject
         """
 
-        attributes: Dict[str, Any] = {
-            key.lstrip("_"): value
-            for key, value in vars(self).items()
-            if not key.startswith("_")
+        attributes: dict[str, Any] = {
+            key.lstrip("_"): value for key, value in vars(self).items() if not key.startswith("_")
         }
 
         # Return a copy of the object
@@ -305,12 +301,12 @@ class MutableBaseObject:
         # Check if the object is greater than the other object
         return dict(vars(self)) > dict(vars(other))
 
-    def __iter__(self) -> Iterator[Tuple[str, Any]]:
+    def __iter__(self) -> Iterator[tuple[str, Any]]:
         """
         Iterate over the attributes of the object.
 
         :return: An iterator over the attributes of the object.
-        :rtype: Iterator[Tuple[str, Any]]
+        :rtype: Iterator[tuple[str, Any]]
         """
 
         # Iterate over the attributes of the object
@@ -468,10 +464,8 @@ class MutableBaseObject:
         :rtype: MutableBaseObject
         """
 
-        attributes: Dict[str, Any] = {
-            key.lstrip("_"): value
-            for key, value in vars(self).items()
-            if not key.startswith("_")
+        attributes: dict[str, Any] = {
+            key.lstrip("_"): value for key, value in vars(self).items() if not key.startswith("_")
         }
 
         # Return a copy of the object
@@ -543,7 +537,7 @@ class MutableBaseObject:
                 return copy.deepcopy(value)
 
         # Copy all attributes of the object recursively
-        copied_attributes: Dict[str, Any] = {
+        copied_attributes: dict[str, Any] = {
             key.lstrip("_"): _deep_copy_value(value)
             for (
                 key,
@@ -560,12 +554,12 @@ class MutableBaseObject:
         # Return an immutable copy of the object
         return self.__class__(**copied_attributes)
 
-    def enumerate(self) -> List[Tuple[int, Tuple[str, Any]]]:
+    def enumerate(self) -> list[tuple[int, tuple[str, Any]]]:
         """
         Return a list of attribute names and values on the object with their index.
 
         :return: A list of attribute names and values on the object with their index.
-        :rtype: List[Tuple[int, Tuple[str, Any]]]
+        :rtype: list[tuple[int, tuple[str, Any]]]
         """
 
         # Return a list of attribute names and values on the object with their index
@@ -613,7 +607,7 @@ class MutableBaseObject:
     def filter_by_type(
         self,
         type_: Type[Any],
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Return attributes of a specific type.
 
@@ -621,7 +615,7 @@ class MutableBaseObject:
         :type type_: Type[Any]
 
         :return: Dictionary of attribute names and values matching the type.
-        :rtype: Dict[str, Any]
+        :rtype: dict[str, Any]
         """
 
         # Return a dictionary of attribute names and values matching the type
@@ -636,16 +630,14 @@ class MutableBaseObject:
         Create a new object from a dictionary.
 
         :param kwargs: A dictionary of key-value pairs to set as attributes on the object.
-        :type kwargs: Dict[str, Any]
+        :type kwargs: dict[str, Any]
 
         :return: A new object created from the dictionary.
         :rtype: MutableBaseObject
         """
 
-        attributes: Dict[str, Any] = {
-            key.lstrip("_"): value
-            for key, value in kwargs.items()
-            if not key.startswith("_")
+        attributes: dict[str, Any] = {
+            key.lstrip("_"): value for key, value in kwargs.items() if not key.startswith("_")
         }
 
         # Return a new object created from the dictionary
@@ -749,7 +741,7 @@ class MutableBaseObject:
             key = f"_{key}"
 
         # Get the dictionary of attributes
-        attributes: Dict[str, Any] = vars(self)
+        attributes: dict[str, Any] = vars(self)
 
         # Check if both a key and value were passed
         if key is not None and value is not None:
@@ -769,27 +761,27 @@ class MutableBaseObject:
         # Return False
         return False
 
-    def items(self) -> List[Tuple[str, Any]]:
+    def items(self) -> ItemsView[str, Any]:
         """
         Return a list of attribute names and values on the object.
 
         :return: A list of attribute names and values on the object.
-        :rtype: List[Tuple[str, Any]]
+        :rtype: ItemsView[str, Any]
         """
 
         # Return a list of attribute names and values on the object
-        return list(vars(self).items())
+        return vars(self).items()
 
-    def keys(self) -> List[str]:
+    def keys(self) -> KeysView[str]:
         """
         Return a list of attribute names on the object.
 
         :return: A list of attribute names on the object.
-        :rtype: List[str]
+        :rtype: KeysView[str]
         """
 
         # Return a list of attribute names on the object
-        return list(vars(self).keys())
+        return vars(self).keys()
 
     def set(
         self,
@@ -817,23 +809,23 @@ class MutableBaseObject:
 
     def to_dict(
         self,
-        exclude: Optional[List[str]] = None,
+        exclude: Optional[list[str]] = None,
         sort: Optional[Literal["ascending", "descending"]] = None,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Convert the object to a dictionary.
 
         :param exclude: A list of attribute names to exclude from the dictionary.
-        :type exclude: Optional[List[str]]
+        :type exclude: Optional[list[str]]
         :param sort: The sort order for the dictionary.
         :type sort: Optional[Literal["ascending", "descending"]]
 
         :return: A dictionary representation of the object.
-        :rtype: Dict[str, Any]
+        :rtype: dict[str, Any]
         """
 
         # Get the dictionary of attributes
-        dictionary: Dict[str, Any] = dict(vars(self))
+        dictionary: dict[str, Any] = dict(vars(self))
 
         # Check if an exclude list is provided
         if not exclude:
@@ -881,23 +873,23 @@ class MutableBaseObject:
 
     def to_filtered_dict(
         self,
-        keys: Optional[List[str]] = None,
+        keys: Optional[list[str]] = None,
         typ: Optional[type] = None,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Return attributes as a dict, optionally filtered by keys or type.
 
         :param keys: Optional list of keys to include.
-        :type keys: Optional[List[str]]
+        :type keys: Optional[list[str]]
         :param typ: Optional type to filter attributes by.
         :type typ: Optional[type]
 
         :return: A dictionary of attributes.
-        :rtype: Dict[str, Any]
+        :rtype: dict[str, Any]
         """
 
         # Get the dictionary of attributes
-        dictionary: Dict[str, Any] = dict(vars(self))
+        dictionary: dict[str, Any] = dict(vars(self))
 
         # Check if the keys parameter is provided
         if keys:
@@ -914,14 +906,14 @@ class MutableBaseObject:
 
     def to_json(
         self,
-        exclude: Optional[List[str]] = None,
+        exclude: Optional[list[str]] = None,
         sort_keys: bool = False,
     ) -> str:
         """
         Convert the object to a JSON string.
 
         :param exclude: A list of attribute names to exclude from the JSON string.
-        :type exclude: Optional[List[str]]
+        :type exclude: Optional[list[str]]
         :param sort_keys: Whether to sort the keys in the JSON string.
         :type sort_keys: bool
 
@@ -930,7 +922,7 @@ class MutableBaseObject:
         """
 
         # Get the dictionary of attributes
-        dictionary: Dict[str, Any] = dict(vars(self))
+        dictionary: dict[str, Any] = dict(vars(self))
 
         # Check if an exclude list is provided
         if not exclude:
@@ -962,7 +954,7 @@ class MutableBaseObject:
         Update the object with key-value pairs.
 
         :param kwargs: A dictionary of key-value pairs to update the object with.
-        :type kwargs: Dict[str, Any]
+        :type kwargs: dict[str, Any]
 
         :return: None
         :rtype: None
@@ -988,7 +980,7 @@ class MutableBaseObject:
         Update only attributes that are not yet set.
 
         :param defaults: Key-value pairs to update as defaults.
-        :type defaults: Dict[str, Any]
+        :type defaults: dict[str, Any]
 
         :return: None
         :rtype: None
@@ -1014,16 +1006,16 @@ class MutableBaseObject:
                 value,
             )
 
-    def values(self) -> List[Any]:
+    def values(self) -> ValuesView[Any]:
         """
         Return a list of attribute values on the object.
 
         :return: A list of attribute values on the object.
-        :rtype: List[Any]
+        :rtype: ValuesView[Any]
         """
 
         # Return a list of attribute values on the object
-        return list(vars(self).values())
+        return vars(self).values()
 
 
 class ImmutableBaseObject(MutableBaseObject):
@@ -1041,7 +1033,7 @@ class ImmutableBaseObject(MutableBaseObject):
         This method calls the parent class constructor to initialize the base object.
 
         :param kwargs: A dictionary of key-value pairs to set as attributes on the object.
-        :type kwargs: Dict[str, Any]
+        :type kwargs: dict[str, Any]
 
         :return: None
         :rtype: None
@@ -1052,8 +1044,13 @@ class ImmutableBaseObject(MutableBaseObject):
             **kwargs,
         )
 
-        # Lock the instance to prevent further modifications
-        self._locked_ = True
+        # Initialize the lock dictionary instance variable
+        self._locked_: Final[dict[str, bool]] = {}
+
+        # Iterate over the keys of the kwargs dictionary
+        for key in kwargs.keys():
+            # Lock the attribute
+            self._locked_[key] = True
 
     @override
     def __copy__(
@@ -1070,17 +1067,22 @@ class ImmutableBaseObject(MutableBaseObject):
         :rtype: MutableBaseObject or ImmutableBaseObject
         """
 
-        attributes: Dict[str, Any] = {
+        # Get the attributes of the object
+        attributes: dict[str, Any] = {
             key.lstrip("_"): value
-            for key, value in vars(self).items()
+            for (
+                key,
+                value,
+            ) in vars(self).items()
             if not key.startswith("_")
         }
 
+        # Check if the object should be mutable
         if as_mutable:
-            # Mutable Kopie zurückgeben
+            # Return a mutable copy of the object
             return MutableBaseObject(**attributes)
         else:
-            # Immutable Kopie zurückgeben
+            # Return an immutable copy of the object
             return self.__class__(**attributes)
 
     @override
@@ -1096,6 +1098,10 @@ class ImmutableBaseObject(MutableBaseObject):
 
         :return: None
         :rtype: None
+
+        Raises:
+            AttributeError: If the object is immutable.
+            AttributeError: If the attribute is locked.
         """
 
         # Check if the instance is locked
@@ -1105,6 +1111,11 @@ class ImmutableBaseObject(MutableBaseObject):
         super().__delattr__(
             name,
         )
+
+        # Check, if the passed attribute is locked
+        if name in self._locked_:
+            # Release the attribute
+            self._locked_.pop(name)
 
     @override
     def __delitem__(
@@ -1119,6 +1130,10 @@ class ImmutableBaseObject(MutableBaseObject):
 
         :return: None
         :rtype: None
+
+        Raises:
+            AttributeError: If the object is immutable.
+            AttributeError: If the attribute is locked.
         """
 
         # Check if the instance is locked
@@ -1128,6 +1143,11 @@ class ImmutableBaseObject(MutableBaseObject):
         super().__delitem__(
             key,
         )
+
+        # Check, if the passed attribute is locked
+        if key in self._locked_:
+            # Release the attribute
+            self._locked_.pop(key)
 
     @override
     def __setattr__(
@@ -1145,6 +1165,10 @@ class ImmutableBaseObject(MutableBaseObject):
 
         :return: None
         :rtype: None
+
+        Raises:
+            AttributeError: If the object is immutable.
+            AttributeError: If the attribute is locked.
         """
 
         # Check if the instance is locked
@@ -1172,6 +1196,10 @@ class ImmutableBaseObject(MutableBaseObject):
 
         :return: None
         :rtype: None
+
+        Raises:
+            AttributeError: If the object is immutable.
+            AttributeError: If the attribute is locked.
         """
 
         # Check if the instance is locked
@@ -1196,22 +1224,33 @@ class ImmutableBaseObject(MutableBaseObject):
 
         :return: None
         :rtype: None
+
+        Raises:
+            AttributeError: If the object is immutable.
+            AttributeError: If the attribute is locked.
         """
-        if getattr(
-            self,
-            "_locked_",
-            False,
-        ) and (name is None or not name.startswith("_")):
-            if name:
-                # Raise an AttributeError if the attribute is not allowed to be modified
-                raise AttributeError(
-                    f"Cannot modify immutable field '{name}' of object {self.__class__.__name__}",
-                )
-            else:
-                # Raise an AttributeError if the object is immutable
-                raise AttributeError(
-                    f"Cannot modify immutable object {self.__class__.__name__}",
-                )
+
+        # Check, if the passed name is None
+        if name is None:
+            # Raise an AttributeError if the object is immutable
+            raise AttributeError(
+                f"Cannot modify immutable object {self.__class__.__name__}",
+            )
+
+        # Check, if the passed name starts with '_', i.e. if is private
+        if name.startswith("_"):
+            # Skip the check
+            return
+
+        # Get the locked state
+        locked: bool = self._locked_.get(name, False)
+
+        # Check, if the attribute is locked
+        if locked:
+            # Raise an AttributeError if the attribute is not allowed to be modified
+            raise AttributeError(
+                f"Cannot modify immutable field '{name}' of object {self.__class__.__name__}",
+            )
 
     @override
     def copy(
@@ -1228,18 +1267,81 @@ class ImmutableBaseObject(MutableBaseObject):
         :rtype: MutableBaseObject or ImmutableBaseObject
         """
 
-        attributes: Dict[str, Any] = {
-            key.lstrip("_"): value
-            for key, value in vars(self).items()
-            if not key.startswith("_")
-        }
+        return self.__copy__(as_mutable)
 
-        if as_mutable:
-            # Mutable Kopie zurückgeben
-            return MutableBaseObject(**attributes)
-        else:
-            # Immutable Kopie zurückgeben
-            return self.__class__(**attributes)
+    def is_locked(
+        self,
+        name: str,
+    ) -> bool:
+        """
+        Check if an attribute is locked.
+
+        :param name: The name of the attribute to check.
+        :type name: str
+
+        :return: True if the attribute is locked, False otherwise.
+        :rtype: bool
+        """
+
+        return self._locked_.get(
+            name,
+            False,
+        )
+
+    def lock_attribute(
+        self,
+        name: str,
+        allow_new: bool = False,
+        value: Optional[Any] = None,
+    ) -> None:
+        """
+        Lock a specific attribute, making it immutable.
+        Optionally, enforce a specific value for it.
+
+        :param allow_new: If True, allows to lock a new attribute.
+        :type allow_new: bool
+        :param name: The name of the attribute to lock.
+        :type name: str
+        :param value: Optional value to enforce for the attribute.
+        :type value: Optional[Any]
+
+        :return: None
+        :rtype: None
+
+        Raises:
+            KeyError: If the attribute has not been registered.
+            AttributeError: If the attribute is private.
+            ValueError: If the attribute has not been registered and allow_new is False.
+        """
+
+        # Check, if the passed attribute has been registered
+        if name not in self._locked_ and not allow_new:
+            # Raise a KeyError exception if the attribute has not been registered
+            raise KeyError(f"Attribute '{name}' has not been registered")
+
+        # Check, if the attribute is private
+        if name.startswith("_"):
+            # Raise an AttributeError if the attribute is private
+            raise AttributeError(f"Cannot lock private attribute '{name}'")
+
+        # Check if the attribute should be set
+        if value is not None:
+            # Set the attribute on the object
+            super().__setattr__(
+                name,
+                value,
+            )
+
+        # Check, if the attribute should be set
+        elif allow_new and not hasattr(
+            self,
+            name,
+        ):
+            # Raise a ValueError exception if the attribute has not been registered
+            raise ValueError(f"New attribute '{name}' must have a value when locking")
+
+        # Lock the attribute
+        self._locked_[name] = True
 
     @override
     def set(
@@ -1257,6 +1359,9 @@ class ImmutableBaseObject(MutableBaseObject):
 
         :return: None
         :rtype: None
+
+        Raises:
+            AttributeError: If the attribute is private.
         """
 
         # Check if the instance is locked
@@ -1268,6 +1373,37 @@ class ImmutableBaseObject(MutableBaseObject):
             value,
         )
 
+    def unlock_attribute(
+        self,
+        name: str,
+    ) -> None:
+        """
+        Unlock a specific attribute, making it mutable.
+
+        :param name: The name of the attribute to unlock.
+        :type name: str
+
+        :return: None
+        :rtype: None
+
+        Raises:
+            KeyError: If the attribute has not been registered.
+            AttributeError: If the attribute is private.
+        """
+
+        # Check, if the passed attribute has been registered
+        if name not in self._locked_:
+            # Raise a KeyError exception if the attribute has not been registered
+            raise KeyError(f"Attribute '{name}' has not been registered")
+
+        # Check, if the attribute is private
+        if name.startswith("_"):
+            # Raise an AttributeError if the attribute is private
+            raise AttributeError(f"Cannot unlock private attribute '{name}'")
+
+        # Unlock the attribute
+        self._locked_[name] = False
+
     @override
     def update(
         self,
@@ -1277,16 +1413,31 @@ class ImmutableBaseObject(MutableBaseObject):
         Update the object with key-value pairs.
 
         :param kwargs: A dictionary of key-value pairs to update the object with.
-        :type kwargs: Dict[str, Any]
+        :type kwargs: dict[str, Any]
 
         :return: None
         :rtype: None
+
+        Raises:
+            AttributeError: If the attribute is private.
         """
 
-        # Check if the instance is locked
-        self._check_locked()
+        # Update the lock dictionary
+        for key in kwargs.keys():
+            # Check if the instance is locked
+            self._check_locked(name=key)
 
         # Update the object with key-value pairs
         super().update(
             **kwargs,
         )
+
+        # Update the lock dictionary
+        for key in kwargs.keys():
+            # Check, if the attribute is already locked
+            if key in self._locked_:
+                # Skip the current attribute
+                continue
+
+            # Lock the attribute
+            self._locked_[key] = True
