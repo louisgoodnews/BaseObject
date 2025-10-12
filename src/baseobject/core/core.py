@@ -343,7 +343,7 @@ class MutableBaseObject:
         """
 
         # Return a string representation of the object
-        return f"<{self.__class__.__name__} ({', '.join(f'{key}={value!r}' for (key, value,) in self.to_dict().items())})>"
+        return f"<{self.__class__.__name__} ({', '.join(f'{key}={value!r}' for (key, value,) in dict(vars(self)).items())})>"
 
     def __setitem__(
         self,
@@ -608,7 +608,7 @@ class MutableBaseObject:
         :param type_: The type to filter attributes by.
         :type type_: Type[Any]
 
-        :return: Dictionary of attribute names and values matching the type.
+        :return: dictionary of attribute names and values matching the type.
         :rtype: dict[str, Any]
         """
 
@@ -804,7 +804,7 @@ class MutableBaseObject:
     def to_dict(
         self,
         allow_leading_underscores: bool = False,
-        exclude: Optional[List[str]] = None,
+        exclude: Optional[list[str]] = None,
         sort: Optional[Literal["ascending", "descending"]] = None,
     ) -> dict[str, Any]:
         """
@@ -820,7 +820,7 @@ class MutableBaseObject:
         """
 
         # Get the dictionary of attributes
-        dictionary: Dict[str, Any] = {
+        dictionary: dict[str, Any] = {
             key: value
             for (
                 key,
