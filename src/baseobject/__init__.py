@@ -6,12 +6,14 @@ Date: 2025-08-20
 from typing import Final, List, Literal
 
 from .core.core import (
+    BaseObjectBuilder,
     ImmutableBaseObject,
     MutableBaseObject,
 )
 
 
 __all__: Final[List[str]] = [
+    "BaseObjectBuilder",
     "ImmutableBaseObject",
     "MutableBaseObject",
 ]

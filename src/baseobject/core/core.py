@@ -19,12 +19,6 @@ from typing import (
 )
 
 
-__all__: Final[list[str]] = [
-    "ImmutableBaseObject",
-    "MutableBaseObject",
-]
-
-
 class MutableBaseObject:
     """
     A class representing a mutable base object.
@@ -1435,3 +1429,134 @@ class ImmutableBaseObject(MutableBaseObject):
 
             # Lock the attribute
             self._locked_[key] = True
+
+
+class BaseObjectBuilder(ImmutableBaseObject):
+    """
+    Base class for object builders.
+    """
+
+    def __init__(self) -> None:
+        """
+        Initialize the object builder.
+
+        :return: None
+        :rtype: None
+        """
+
+        # Call the parent class constructor
+        super().__init__(**{"configuration": {}})
+
+    @override
+    def __contains__(
+        self,
+        item: Any,
+    ) -> bool:
+        """
+        Check if the object contains an attribute.
+
+        :param item: The item to check.
+        :type item: Any
+
+        :return: True if the item exists on the object, False otherwise.
+        :rtype: bool
+        """
+
+        # Check if the item exists on the object
+        return item in self.configuration
+
+    @override
+    def __delitem__(
+        self,
+        key: str,
+    ) -> None:
+        """
+        Delete an attribute from the object.
+
+        :param key: The key of the attribute to delete.
+        :type key: str
+
+        :return: None
+        :rtype: None
+
+        Raises:
+            KeyError: If the attribute does not exist.
+        """
+
+        # Delete the attribute from the object
+        del self.configuration[key]
+
+    @override
+    def __getitem__(
+        self,
+        key: str,
+    ) -> Any:
+        """
+        Get an attribute from the object.
+
+        :param key: The key of the attribute to get.
+        :type key: str
+
+        :return: The value of the attribute.
+        :rtype: Any
+
+        Raises:
+            KeyError: If the attribute does not exist.
+        """
+
+        # Get the attribute from the object
+        return self.configuration[key]
+
+    @override
+    def __setitem__(
+        self,
+        key: str,
+        value: Any,
+    ) -> None:
+        """
+        Set an attribute on the object.
+
+        :param key: The key of the attribute to set.
+        :type key: str
+        :param value: The value to set the attribute to.
+        :type value: Any
+
+        :return: None
+        :rtype: None
+
+        Raises:
+            AttributeError: If the attribute is private.
+        """
+
+        # Set the attribute on the object
+        self.configuration[key] = value
+
+    @override
+    def __str__(
+        self,
+    ) -> str:
+        """
+        Return a string representation of the object.
+
+        :return: A string representation of the object.
+        :rtype: str
+        """
+
+        # Return a string representation of the object
+        return str(self.configuration)
+
+    def build(self) -> Any:
+        """
+        Build the object.
+
+        :return: The built object.
+        :rtype: Any
+        """
+
+        raise NotImplementedError(f"{self.__class__.__name__}.build() is not implemented yet.")
+
+
+# ---- Auto-Export -----
+
+# Auto-export all non-rpivate symbols
+__all__: Final[list[str]] = [name for name in globals() if not name.startswith("_")]
